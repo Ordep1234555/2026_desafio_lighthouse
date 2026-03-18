@@ -1,0 +1,2 @@
+-- Lucro = Preço de venda - Custo de importação
+-- Preciso saber como querem que converta o dolar
