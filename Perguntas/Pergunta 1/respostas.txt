@@ -1,0 +1,73 @@
+1.1 - SQL → Código calculando:
+-- Como a instrução especifica para não fazer tratamento dos dados,
+-- vou usar uma CTE para ter a sale_date como data provisoriamente
+-- a intenção é uma query que responda todas as perguntas
+WITH vendas_formatada AS (
+    SELECT 
+        CASE 
+            WHEN sale_date LIKE '____-__-__' THEN CAST(sale_date AS DATE)
+            WHEN sale_date LIKE '__-__-____' THEN TO_DATE(sale_date, 'DD-MM-YYYY')
+            ELSE NULL 
+        END AS data_formatada
+    FROM vendas_raw
+),
+info1_tmp AS (
+    SELECT 
+        MIN(data_formatada) AS data_minima,
+        MAX(data_formatada) AS data_maxima
+    FROM vendas_formatada
+),
+info2_tmp AS (
+    SELECT COUNT(*) AS total_LINHAS, 
+        MIN(total) AS valor_minimo,
+        MAX(total) AS valor_maximo,
+        AVG(total) AS valor_medio
+    FROM vendas_raw
+),
+info3_tmp AS(
+    SELECT COUNT(*) as total_COLUNAS
+    FROM information_schema.columns
+    WHERE table_name = 'vendas_raw'
+)
+
+SELECT 
+    total_LINHAS,
+    total_COLUNAS, 
+    data_minima,
+    data_maxima,
+    valor_minimo, 
+    valor_maximo, 
+    valor_medio 
+FROM info1_tmp, info2_tmp, info3_tmp;
+
+1.2 - Validação → Qual é o valor máximo registrado na coluna "total"?
+2222973
+
+1.3 - Interpretação → 
+Com base na análise exploratória realizada, escreva um breve diagnóstico sobre a confiabilidade do dataset vendas_2023_2024.csv para análises futuras. Comente sobre:
+Possíveis outliers em "total",
+Qualidade dos dados (valores nulos ou inconsistentes),
+e se você considera que o dataset está pronto para análises ou se exigiria tratamento prévio.
+
+O dataset não está pronto para análises ainda. Embora existam poucas coisas para consertar.
+A primeira coisa a se fazer é consertar o campo sale_date, existem datas com o ano primeiro,
+e datas com o dia primeiro, ao consertar isso é possivel transformar a coluna no tipo data para facilitar.
+Para consistencia também é bom garatir que total esteja como decimal para não ter erro de ponto flutuante.
+Existem algumas linhas nulas que provavelmente indicam vendas apagadas, já que o id parece ser incremental.
+Dos 10000 ids (0 à 9999), 105 não existem no csv
+Entre as linhas validas, não existe nenhum valor nulo.
+Entre as datas 01/01/2023 e 31/12/2024 apenas 6 dias não tem informações de venda.
+O total é inconsistente, os valores unitarios dos produtos variam a cada compra.
+Talvez seja um desconto que não tenha informação na tabela.
+Os ids embora falte alguns são unicos e servem para chave primaria. 
+Ao buscar outliers os dados parecem confiaveis.
+Ao olhar somente total, encontrei alguns outliers altos e nenhum baixo.
+Limitando somente a cada produto, não achei nenhum outlier.
+Ao refinar a busca para levar em consideração o preço unitario dos itens (total/quantidade)
+por produto também não achei nenhum valor que fosse classificado como outlier, o que é um bom sinal.
+Para explorar mais, busquei alguma anomalia por cliente, mas mais nenhum outlier.
+Por fim, ao olhar por dia, encontrei 12 datas que tinham total consideravelmente acima da media 
+dos ultimos 7 dias. Entre eles, 4 que tinham variação de mais de 2x que a media. Mas podem ser somente
+dias atipicos.
+É necessario olhar as outras tabelas para dizer se id_client, id_product e os preços estão coerentes
+e não precisam de tratamento.

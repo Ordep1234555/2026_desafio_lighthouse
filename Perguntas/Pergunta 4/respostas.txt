@@ -1,0 +1,43 @@
+- Vendas Prejuizo = 62,47%
+- Vendas Lucro = 37,53%
+- Receita Total = 2610279510.70
+- Custo Total = 2749121506.71
+- Lucro Total = -138841996.01
+- Soma Lucros = 43468365.83
+- Soma Prejuizo = -182310361.84
+- Percentual de Perda (Prejuizo/Receita) = 6,98%
+- Maior Prejuizo Total: 
+72 -> -39821041.65
+83 -> -18614294.89
+- Maior Prejuizo Relativo:
+72 -> 63.15004926752485756300
+83 -> 41.94540038812513745700
+
+Minha primeira alteração para facilitar o processo foi adicionar uma end_date na tabela 
+de custos_importacao. Dessa maneira eu pude chegar se a data da venda estava entre 
+a data inicial do preço e a data final do preço. Como a data final dos que ainda estavam 
+validos era null também precisa checar. 
+A tabela do dolar eu utilizei a API do Banco Central para pegar a data e o valor de venda
+no periodo desejado (01/01/2023-31/12/2024), como só precisei fazer uma vez, fiz logo
+pelo python para salvar em um df que enviei para o SQL, depois foi só corrigir o formato
+da data e da taxa. Também precisei preencher os dias sem cotação, para isso criei uma 
+CTE que continha todas as datas do periodo e juntei com a tabela importada, em seguida
+normalmente seria suficiente fazer um coalesce (subsituir valores null) com um lag (ultimo valor),
+porem, como o dia 01/01/2023 não tinha cotação, precisei adaptar, cada data foi marcada em um grupo,
+o grupo mudava a cada taxa valida, e ai os nulls dentro desse grupo eram preenchidos com a primeira
+taxa valida encontrada, então o dia 01/01/2023 foi preenchido com a taxa de 02/01/2023, enquanto o 
+intervalo null 07/01/2023-08/01/2023 foram preenchidos com a taxa de 06/01/2023.
+Para calcular lucro e prejuizo fiz um join entre as tabelas de vendas e de custos utilizando
+o id do produto e a data da venda estando dentro das datas dos custos, e um join com a tabela
+de cambio com a data da venda sendo igual a data do cambio. Resultando em uma tabela:
+id_produto, data_venda, qtd, total, usd_price, taxa_cambio
+sendo facil calcular:
+Custo em brl = qtd*usd_price*taxa_cambio
+Lucro em brl = total - custo
+Quando agrupei por produto, calculei:
+Receita por produto = Soma de total
+Custo por produto = Soma de custo
+Lucro por produto = Soma de lucros
+Prejuizo por produto = Soma de lucros negativos
+O que encontrei foi preocupante, porque indica que a empresa fechou o ano no negativo.
+Mais de 60% das vendas tiveram prejuizo, somente 25 dos 150 produtos tiveram lucro.

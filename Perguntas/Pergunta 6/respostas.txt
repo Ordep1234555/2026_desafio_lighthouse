@@ -1,0 +1,13 @@
+Piores dias / Média:
+Domingo 3319503.57
+Segunda-feira 3465137.71
+...
+Sábado 3710540.55
+Sexta-feira 3715003.41
+
+É necessario utilizar uma tabela calendário para garantir que todas as datas 
+apareçam, independente se tem vendas ou não, como a tabela não sabe quais datas faltam
+é necessario gerar as opções e cruzar com a tabela original para ver quais datas estão vazias.
+Assim, é possivel garantir uma maior consistencia nos dados, pois todas as datas aparecem.
+Caso muitos do mesmo dia estivessem faltando, a media é inflada, pois só observa os dados
+positivos.

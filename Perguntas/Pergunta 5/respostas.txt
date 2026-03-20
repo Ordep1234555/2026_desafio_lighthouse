@@ -1,0 +1,20 @@
+propulsão - 6030
+ancoragem - 5632
+eletrônicos - 5214
+
+TOP 3 Clientes: 47 (64003343.75, 190), 42 (72187369,5, 222), 9 (66788855.35, 218)
+
+A limpeza das categorias aconteceu durante o processo da resposta 2, para isso, 
+a primeira coisa que fiz foi garantir que não haveria nenhum erro devido a capitalização,
+espaços extras, acentos, cedilhas ou outros simbolos especiais. Então aplique tratamentos
+de normalização aos dados, também fiz isso para as categorias conhecidas e desejadas 
+('ancoragem', 'eletrônicos', 'propulsão'). Em seguida, para resolver erros de gramatica,
+eu utilizei n-grams para dividir a palavra (escolhi para dividir em pedaços de 2-4 letras)
+e olhando para a frequencia desses pedaços e como os pedaços das categorias desejadas funcionam
+prever qual categoria era mais provavel. Para ter certeza que tudo estava certo chequei manualmente
+os casos em que a confiança estava menor. Por fim, mapeei as categorias previstas para as
+com acentos para ficar mais agradavel.
+Utilizando uma CTE que possuia tanto o id do cliente quanto a categoria, ficou facil
+utilizar um COUNT(DISTINCT category) para ver quantas categorias unicas o cliente havia comprado.
+Ainda utilizano CTE resolvi o problema de compras somente dos 10 melhores clientes, bastou
+colocar a condição de que o id do cliente deveria exister na tabela de top 10 clientes.
