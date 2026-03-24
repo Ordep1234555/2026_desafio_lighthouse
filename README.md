@@ -4,6 +4,8 @@
 
 -> Link Dashboard: [PowerBI](https://app.powerbi.com/view?r=eyJrIjoiZmI4OWRhMWYtNjJjZi00NDc1LWJlZTgtZTA0OGE3MWFlNWEyIiwidCI6ImY2ZjI3NTFkLWM4ODEtNDYzYy05ZmNlLTcyODdjZGI2MDE5MiJ9)
 
+-> Apresentação Youtube: [Vídeo](https://youtu.be/5F-l359fhkY)
+
 -> Docker Cria a base de dados Postgres
 
 -> EDA.ipynb trata os dados e sobe eles para o banco
