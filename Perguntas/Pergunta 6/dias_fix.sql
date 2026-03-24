@@ -45,17 +45,3 @@ GROUP BY
     dia_semana
 ORDER BY
     media_venda;
-
-
-SELECT 
-    data_dia,
-    dia_semana,
-    vendas,
-    volume,
-    valor_venda
-FROM new_sales_gap;
-
--- 0=Domingo, 6=Sábado
--- SELECT EXTRACT(DOW FROM sale_date)
--- Dia extenso inglês
--- SELECT TO_CHAR(sale_date, 'Day')
