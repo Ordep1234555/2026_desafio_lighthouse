@@ -30,6 +30,8 @@ sales: id_sale, id_client, id_product, qtd, brl_total, sale_date
 
 cambio_usd: taxa_cambio, taxa_cambio_data
 
+![Imagem Relacional](LH_Nautical-ER_Diagram.png)
+
 ## Resumo Tratamento de dados:
 ### clients:
 - Location foi dividido entre city e state
